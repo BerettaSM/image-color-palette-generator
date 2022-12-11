@@ -1,0 +1,37 @@
+*,
+body,
+html
+{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.li
+{
+    list-style: none;
+}
+
+.color-box
+{
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+    border-radius: 8px;
+    background-color: blue;
+    cursor: pointer;
+}
+
+#custom-warning
+{
+    position: fixed !important;
+    left: 50% !important;
+    top: 50% !important;
+    display: inline-block !important;
+    transform: translate(-50%);
+}
+
+.invisible
+{
+    visibility: none;
+}

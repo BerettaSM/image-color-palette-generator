@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block title %}Image Color Palette Generator{% endblock %}
+
+{% block content %}
+
+    <header>
+
+        <div class="container bg-primary mt-3 rounded">
+
+            <h1 class="text-light text-center py-4">Image Color Palette Generator</h1>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <div class="container">
+
+            {% with messages = get_flashed_messages() %}
+
+                {% if messages %}
+
+                    <ul class="flashes d-flex flex-row justify-content-center mt-4">
+
+                        {% for message in messages %}
+
+                            <li class="alert alert-danger text-center li">
+                                {{ message }}
+                            </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                {% endif %}
+
+            {% endwith %}
+
+            <div id="options" class="d-flex justify-content-center p-2">
+
+                <form class="my-form" enctype="multipart/form-data"
+                      action="{{ url_for('views.verify_image') }}" method="POST" >
+
+                    <div>
+
+                        <div class="mb-3">
+
+                            <input
+                                type="file"
+                                id="file_elem"
+                                name="file_elem"
+                                accept="image/*"
+                                class="form-control form-control-lg"
+                            />
+
+                        </div>
+
+                        <div class="mb-3 d-flex flex-row justify-content-evenly align-items-end">
+
+                            <div>
+
+                                <label for="number" class="form-label">
+                                    Number of colors to extract
+                                </label>
+
+                                <input
+                                    type="number"
+                                    min="5"
+                                    max="30"
+                                    value="5"
+                                    name="number"
+                                    id="number"
+                                    class="form-control form-control-lg text-center"
+                                />
+
+                            </div>
+
+                            <div>
+
+                                <input
+                                    type="submit"
+                                    value="Analyze"
+                                    class="btn btn-primary btn-lg"
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            {% if color_palette %}
+
+                <div id="colors" class="d-flex justify-content-center p-2">
+
+                    <h3 class="text-primary">Color Palette(Click to copy to clipboard): </h3>
+
+                    <ul class="d-flex flex-column">
+
+                        {% for color in color_palette %}
+
+                            <li class="color li d-flex align-items-center my-1">
+
+                                <div
+                                    class="color-box my-1"
+                                    style="background-color: rgb{{ color[0] }};"
+                                    onclick="copyToClipboard('{{ color[1] }}')"
+                                ></div>
+
+                                <span class="text-primary fs-5 m-2">RGB{{ color[0] }} / HEX: {{ color[1] }}</span>
+
+                            </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </main>
+
+    <div id="custom-warning" class="alert alert-info text-center fs-5 invisible" role="alert">
+        Meu teste
+    </div>
+
+    <script>
+        let timeoutEvent = null;
+        function copyToClipboard(color) {
+            navigator.clipboard.writeText(color);
+            showAlert(`${color} copied to clipboard!`);
+        }
+        function showAlert(message) {
+            if(timeoutEvent != null) clearTimeout(timeoutEvent);
+            const target = document.getElementById('custom-warning');
+            target.innerText = message;
+            target.classList.remove('invisible');
+            timeoutEvent = setTimeout(() => {
+                target.classList.add('invisible');
+            }, 1500);
+        }
+    </script>
+
+{% endblock %}
